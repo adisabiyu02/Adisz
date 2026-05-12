@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Dilaa! 🎂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --pink-soft: #fce4ec;
+            --orange-soft: #ffe0b2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--pink-soft) 0%, var(--orange-soft) 100%);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            color: #333;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .confetti {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: drift 8s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes drift {
+            from { transform: translateY(110vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        /* --- LAYOUT --- */
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .page {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid white;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* --- CONTENT --- */
+        .photo-frame {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            border: 5px solid white;
+            overflow: hidden;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1, h2 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .kado-belum-siap {
+            font-size: 0.85rem;
+            color: #e67e22;
+            font-style: italic;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* --- GIFT & VIDEO PLAYER --- */
+        .gift-container {
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 15px auto;
+            display: inline-block;
+        }
+
+        .gift-icon {
+            font-size: 70px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .video-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .btn-vid {
+            background: var(--secondary);
+            color: white;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-vid:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4); }
+
+        .video-wrapper {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        video { width: 100%; display: block; }
+
+        /* --- BUTTONS --- */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: 0.3s;
+        }
+
+        .btn-next { background: var(--primary); color: white; }
+        .btn-prev { background: #bdc3c7; color: white; }
+        .btn-wa { background: #25D366; color: white; }
+        .btn-close { background: #f44336; color: white; font-size: 0.8rem; padding: 5px 15px; margin-top: 10px; }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            resize: none;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Musik Latar -->
+    <audio id="bgMusic" loop>
+        <source src="musik.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="confetti-container" id="confetti"></div>
+
+    <div class="container">
+        
+        <!-- Halaman 1 -->
+        <section class="page active" id="page1">
+            <div class="card">
+                <div class="photo-frame"><img src="ur_profile.jpeg" alt="Foto 1"></div>
+                <h1>Happy Birthday Dilaa! 🎂</h1>
+                <p>Selamat hari menetas yaa! semoga hari ini jadi hari spesial mu ❤️</p>
+                <div class="btn-group">
+                    <button class="btn btn-next" onclick="startExperience()">Mulai ✨</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman 2 -->
+        <section class="page" id="page2">
+            <div class="card">
+                <div class="photo-frame"><img src="ur prof.jpeg" alt="Foto 2"></div>
+                <h2>Time Flies</h2>
+                <p>"Ga kerasa ya orang yang gw temuin dari madrasah, sekarang udah mau kuliah aja."</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="goToPage(1)">Kembali</button>
+                    <button class="btn btn-next" onclick="goToPage(3)">Lanjut</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman 3 -->
+        <section class="page" id="page3">
+            <div class="card">
+                <h2>A Big Wish</h2>
+                <p>Harapanku untukmu kedepannya: semoga kamu bisa capai impianmu, bahagiain orang tuamu, dan bikin bangga kakakmu.<br>"Tetap jadi versi dirimu sendiri."</p>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="goToPage(2)">Kembali</button>
+                    <button class="btn btn-next" onclick="goToPage('gift')">Buka Kado 🎁</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman Gift -->
+        <section class="page" id="page-gift">
+            <div class="card">
+                <div id="giftSection">
+                    <h2>Kado Spesial! 🎁</h2>
+                    <p>Klik kadonya ya!</p>
+                    <div class="gift-container" onclick="openGift()">
+                        <div class="gift-icon">🎁</div>
+                    </div>
+                </div>
+
+                <div id="videoMenu" style="display: none;">
+                    <h2 id="videoTitle">yah kado nya belum siap nih :(</h2>
+                    <!-- TEKS BARU DI SINI -->
+                    <span class="kado-belum-siap">"sementara aku kasih 2 video ini dulu ya."</span>
+                    
+                    <div id="btnList" class="video-buttons">
+                        <button class="btn-vid" onclick="playVideo('kompres.mp4', 'From Me 📹')">From Me 📹</button>
+                        <button class="btn-vid" onclick="playVideo('wangsaf.mp4', 'From Bestfriends 🌍')">From Bestfriends 🌍</button>
+                    </div>
+
+                    <div id="playerArea" style="display: none;">
+                        <div class="video-wrapper">
+                            <video id="mainVideo" controls playsinline>
+                                <source id="videoSrc" src="" type="video/mp4">
+                                Browser kamu tidak mendukung format video ini.
+                            </video>
+                        </div>
+                        <button class="btn btn-close" onclick="stopVideo()">Tutup Video</button>
+                    </div>
+                </div>
+
+                <div class="btn-group" style="margin-top: 20px;">
+                    <button class="btn btn-prev" onclick="goToPage(3)">Kembali</button>
+                    <button id="btnNextFromGift" class="btn btn-next" onclick="goToPage(4)" style="display: none;">Lanjut</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Halaman 4 -->
+        <section class="page" id="page4">
+            <div class="card">
+                <h2>Message for Me?</h2>
+                <p>Kasih komen bisa kali, tentang web nya atau apa wkwk.<br> tulis di sini ya!</p>
+                <textarea id="pesanBalas" placeholder="Tulis pesanmu..." rows="3"></textarea>
+                <div class="btn-group">
+                    <button class="btn btn-prev" onclick="goToPage('gift')">Kembali</button>
+                    <button class="btn btn-wa" onclick="kirimWA()">Kirim ke WhatsApp 📱</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const confettiBox = document.getElementById('confetti');
+        const emojis = ['🎈', '✨', '🎂', '💖', '🎉'];
+        for(let i=0; i<15; i++) {
+            const div = document.createElement('div');
+            div.className = 'confetti';
+            div.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.animationDuration = (Math.random()*5 + 5) + 's';
+            div.style.animationDelay = Math.random()*5 + 's';
+            confettiBox.appendChild(div);
+        }
+
+        const audio = document.getElementById("bgMusic");
+
+        function startExperience() {
+            audio.play().catch(() => console.log("Audio play blocked"));
+            goToPage(2);
+        }
+
+        function goToPage(pageNum) {
+            const currentActive = document.querySelector('.page.active');
+            let targetId = (pageNum === 'gift') ? 'page-gift' : 'page' + pageNum;
+            const targetPage = document.getElementById(targetId);
+
+            if (targetPage) {
+                currentActive.style.opacity = '0';
+                setTimeout(() => {
+                    currentActive.classList.remove('active');
+                    currentActive.style.display = 'none';
+                    targetPage.style.display = 'flex';
+                    setTimeout(() => {
+                        targetPage.classList.add('active');
+                        targetPage.style.opacity = '1';
+                    }, 50);
+                }, 400);
+            }
+        }
+
+        function openGift() {
+            document.getElementById('giftSection').style.display = 'none';
+            document.getElementById('videoMenu').style.display = 'block';
+            document.getElementById('btnNextFromGift').style.display = 'inline-block';
+        }
+
+        function playVideo(file, title) {
+            const playerArea = document.getElementById('playerArea');
+            const btnList = document.getElementById('btnList');
+            const video = document.getElementById('mainVideo');
+            const source = document.getElementById('videoSrc');
+            const kadoText = document.querySelector('.kado-belum-siap');
+            
+            document.getElementById('videoTitle').innerText = title;
+            source.src = file;
+            
+            btnList.style.display = 'none';
+            if(kadoText) kadoText.style.display = 'none'; // Sembunyikan teks kado saat video main
+            playerArea.style.display = 'block';
+            
+            video.load();
+            video.play();
+        }
+
+        function stopVideo() {
+            const video = document.getElementById('mainVideo');
+            const kadoText = document.querySelector('.kado-belum-siap');
+            video.pause();
+            document.getElementById('playerArea').style.display = 'none';
+            document.getElementById('btnList').style.display = 'flex';
+            if(kadoText) kadoText.style.display = 'block'; // Munculkan kembali teks kado
+            document.getElementById('videoTitle').innerText = "Pilih Videonya ✨";
+        }
+
+        function kirimWA() {
+            const nomorWA = "6285725264225"; 
+            const pesanInput = document.getElementById("pesanBalas").value;
+            const pesanFinal = pesanInput.trim() !== "" ? pesanInput : "Makasih ya kejutan ultahnya! ❤️";
+            window.open("https://api.whatsapp.com/send?phone=" + nomorWA + "&text=" + encodeURIComponent(pesanFinal), '_blank');
+        }
+    </script>
+</body>
+</html>
